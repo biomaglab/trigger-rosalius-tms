@@ -15,8 +15,8 @@ class UpdateNavigationInfo:
         self.target_status = None
         self.marker_label = None
 
-    def connect(self, address):
-        self.rc = RemoteControl(address) # Refers to the first pulse, the Conditioning Stimulus (CS)
+    def connect(self, address, port):
+        self.rc = RemoteControl('http://' + address + ':' + port) # Refers to the first pulse, the Conditioning Stimulus (CS)
         self.rc.try_connect()
         self.call_thread()
 
@@ -31,23 +31,24 @@ class UpdateNavigationInfo:
             if len(buffer) == 0:
                 pass
 
-            #elif any(item in [d['topic'] for d in buffer] for item in consts.PUB_MESSAGES):
             for i in range(len(buffer)):
-                topic = [d['topic'] for d in buffer]
-                if topic[i] == consts.PUB_MESSAGES[0]:
+                if buffer[i]['topic'] == consts.PUB_MESSAGES[0]:
                     self.target_status = buffer[i]["data"]["state"]
-                elif topic[i] == consts.PUB_MESSAGES[1]:
-                    self.marker_label = buffer[i]["data"]["state"]
+                elif buffer[i]['topic'] == consts.PUB_MESSAGES[1]:
+                    self.marker_label = buffer[i]["data"]["name"]
 
-            time.sleep(0.2)
+            time.sleep(0.1)
 
     def call_thread(self):
         '''
-        Call the update_target_status function as a thread
+        Call the get_buffer_msg function as a thread
         '''
 
         self.thread = threading.Thread(target=self.get_buffer_msg, daemon=True)
         self.thread.start()
+
+    #TODO: stop thread
+    # def stop_thread(self):
 
 # create_navigation_marker = True
 # delete_marker = False

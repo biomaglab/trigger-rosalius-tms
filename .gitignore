@@ -1,9 +1,6 @@
 
-.idea/inspectionProfiles/Project_Default.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/trigger_double_Inv.iml
-.idea/vcs.xml
+.idea/
+
+__pycache__/
 
 Markers-sequence/

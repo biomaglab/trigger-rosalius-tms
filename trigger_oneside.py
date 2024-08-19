@@ -15,7 +15,7 @@ arduino.connect('COM3', '9600')
 
 '''Connection to Updator'''
 updator = UpdateNavigationInfo()
-updator.connect('http://192.168.200.202:5000')
+updator.connect('192.168.200.202', '5000')
 
 pulse_index = 0
 
@@ -29,21 +29,6 @@ file = open(dir, mode)
 file.write('---------------------------\n')
 
 while True:
-
-    # if keyboard.is_pressed('d'):
-    #     send_to_navigation_delete_marker(rc1.rc1)
-    #     time.sleep(2)
-    #     print('delete marker')
-    #
-    # if keyboard.is_pressed('u'):
-    #     send_to_navigation_unset_marker(rc1.rc1)
-    #     time.sleep(2)
-    #     print('unset marker')
-    # if keyboard.is_pressed('c'):
-    #     send_trigger_to_navigation(rc1.rc1)
-    #     time.sleep(2)
-    #     print('create marker')
-
 
     #This one sends the pulses direclty to Arduino, without need of the navigation
     if consts.DEBUG_ARDUINO:
@@ -60,8 +45,6 @@ while True:
                 if updator.target_status:
                     arduino.send_to_arduino(1) #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
                     file.write(f'{updator.marker_label}\n')
-                    #send_trigger_to_navigation(rc1.rc1)
-                    #send_to_navigation_delete_marker(rc1)
                     print("disparando "+ str(updator.marker_label) + " __ "+ str(pulse_index))
 
                     time.sleep(random.uniform(7, 10))
