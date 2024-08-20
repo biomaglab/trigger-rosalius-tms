@@ -1,32 +1,19 @@
-import os
 import time
 import keyboard
 import random
-from arduino_connection import ArduinoConnection
-from update_navigation import UpdateNavigationInfo
-import constants as consts
-
-# File to register sequences
-file_name = 'test.txt'
+from Components.arduino_connection import ArduinoConnection
+from Components.update_navigation import UpdateNavigationInfo
+from Components import constants as consts, txt_configs as txt
 
 '''Connection to Arduino'''
 arduino = ArduinoConnection()
-arduino.connect('COM3', '9600')
+arduino.connect('COM5', 9600)
 
 '''Connection to Updator'''
-updator = UpdateNavigationInfo()
-updator.connect('192.168.200.202', '5000')
+updator = UpdateNavigationInfo(1)
+updator.connect('192.168.200.202', [5000])
 
 pulse_index = 0
-
-# File configs
-dir = 'Markers-sequence/' + file_name
-if os.path.exists(dir):
-    mode = 'a'
-else:
-    mode = 'w'
-file = open(dir, mode)
-file.write('---------------------------\n')
 
 while True:
 
@@ -42,15 +29,14 @@ while True:
             print("Sequence Started")
             while pulse_index < consts.STIMULI_NUMBER:  #Esse while vai mudar para algo do tipo delivering target on, para poder pausar a sequencia
                 print(updator.target_status)
-                if updator.target_status:
+                if updator.target_status[0]:
                     arduino.send_to_arduino(1) #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
-                    file.write(f'{updator.marker_label}\n')
-                    print("disparando "+ str(updator.marker_label) + " __ "+ str(pulse_index))
-
+                    txt.file.write(f'{updator.marker_label[0]}\n')
+                    print("disparando "+ str(updator.marker_label[0]) + " __ "+ str(pulse_index))
                     time.sleep(random.uniform(7, 10))
                     pulse_index += 1
 
-            file.close()
+            txt.file.close()
             arduino.disconnect()
         #hold b key to stop sequence
         if keyboard.is_pressed('b') or pulse_index >= consts.STIMULI_NUMBER:
