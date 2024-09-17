@@ -13,4 +13,4 @@ else:
 
 # Start file
 file = sequence_file.open(mode)
-file.write('\n')
+file.write('')

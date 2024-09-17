@@ -5,7 +5,7 @@ unsigned long DelayTime = 0;            // Delay compared to Trigger pulse in us
 unsigned long TriggerPeakDuration = 200; // Trigger pulse Peak duration in us
 volatile unsigned long microsOfRisingTMS;  // Timing control for Stimulus and Trigger
 int myTimeout = 5; // milliseconds for Serial.readString
-int ISI_inib = 4; // in miliseconds
+int ISI_inib = 2; // in miliseconds
 int ISI_exci = 18; // in miliseconds
 bool checkHigh = false;
 

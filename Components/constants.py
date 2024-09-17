@@ -3,7 +3,7 @@
 # trigger constants
 START_SEQUENCE = False # Button in the future
 DEBUG_ARDUINO = False
-STIMULI_NUMBER = 10
+STIMULI_NUMBER = 30
 
 
 # Publisher messages from invesalius

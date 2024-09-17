@@ -34,7 +34,7 @@ def SendoToArduino(connection, msg):
 # Try connection and send message
 def ArduinoConnection():
     try:
-        connection = serial.Serial("COM6", "9600", timeout=1)
+        connection = serial.Serial("COM3", "115200", timeout=1)
         print("Connection Established")
         return connection
         #time.sleep(1.0)
@@ -93,8 +93,8 @@ class UpdateNavigationInfo:
         Define information for updating navigation information; characteristics of the object
         '''
 
-        self.rc1 = RemoteControl('http://127.0.0.1:5000')  # Refers to the first pulse, the Conditioning Stimulus (CS)
-        self.rc2 = RemoteControl('http://127.0.0.1:1000') # Refers to the second pulse, the Test Stimulus (TS)
+        self.rc1 = RemoteControl('http://169.254.82.20:5000')  # Refers to the first pulse, the Conditioning Stimulus (CS)
+        self.rc2 = RemoteControl('http://169.254.82.20:1000') # Refers to the second pulse, the Test Stimulus (TS)
         self.message = 'Coil at target' #Message that is going to be checked in the Buffer
         self.target_status_relay1 = None
         self.target_status_relay2 = None
@@ -127,6 +127,7 @@ class UpdateNavigationInfo:
                         self.target_status_relay2 = self.buf2[i]["data"]["state"]
 
             #print(f'target 1 = {self.target_status_relay1} , target 2 = {self.target_status_relay2}')
+            time.sleep(0.1)
             #return
 
     def call_thread(self):
