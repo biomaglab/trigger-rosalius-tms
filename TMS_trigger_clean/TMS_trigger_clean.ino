@@ -8,8 +8,8 @@ int myTimeout = 5; // milliseconds for Serial.readString
 int ISI_inib = 4; // in miliseconds
 int ISI_exci = 18; // in miliseconds
 bool checkHigh = false;
-#define searchcoil1 0; // searchcoil associada ao estímulo condicionante, ligada ao pino 2 (interrupção 0 no Arduino Mega)
-#define searchcoil2 1; // searchcoil associada ao estímulo teste, ligada ao pino 3 (interrupção 1 no Arduino Mega)
+#define searchcoil1 2; // searchcoil associada ao estímulo condicionante, ligada ao pino 2 (interrupção 0 no Arduino Mega)
+#define searchcoil2 3; // searchcoil associada ao estímulo teste, ligada ao pino 3 (interrupção 1 no Arduino Mega)
 unsigned long millisCondicionante=0; //tempo associado à detecção do estímulo condicionante (talvez transformar essa variável num vetor)
 unsigned long millisTeste=0; //tempo associado à detecção do estímulo teste (talvez transformar essa variável num vetor)
 unsigned long latenciaSearchcoils=0; //latência entre os pulsos, determinada a partir das respostas das searchcoils (talvez transformar num vetor)
@@ -25,8 +25,8 @@ void setup() {
   pinMode(searchcoil2,INPUT);
   digitalWrite(OutPinTMS1, LOW);
   digitalWrite(OutPinTMS2, LOW);
-  attachinterrupt(searchcoil1, cronometro1, RISING); //interromper o código quando detectar RISING na searchcoil1, pra chamar a função cronometro1 e salvar o instante do estímulo condicionante
-  attachinterrupt(searchcoil2, cronometro2, RISING); //interromper o código quando detectar RISING na searchcoil2, pra chamar a função cronometro2 e salvar o instante do estímulo teste
+  attachinterrupt(digitalPinToInterrupt(searchcoil1), cronometro1, RISING); //interromper o código quando detectar RISING na searchcoil1, pra chamar a função cronometro1 e salvar o instante do estímulo condicionante
+  attachinterrupt(digitalPinToInterrupt(searchcoil2), cronometro2, RISING); //interromper o código quando detectar RISING na searchcoil2, pra chamar a função cronometro2 e salvar o instante do estímulo teste
 }
 
 void loop() {

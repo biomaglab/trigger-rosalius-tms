@@ -28,8 +28,8 @@ def SendoToArduino(connection, msg):
     msg = str(msg)
     connection.write(msg.encode())
 
-# def ReadFromArduino(connection):
-#     print(connection.readline())
+def ReadFromArduino(connection):
+    print(connection.readline())
 
 # Try connection and send message
 def ArduinoConnection():
@@ -179,7 +179,7 @@ while True:
     #This one sends the pulses direclty to Arduino, without need of the navigation
     if debug_arduino_ppTMS == True:
         SendoToArduino(arduino_connection, 4)
-        #ReadFromArduino(arduino_connection)
+        ReadFromArduino(arduino_connection)
         time.sleep(5)
 
     if debug_arduino_ppTMS == False:
@@ -192,19 +192,22 @@ while True:
                 if updator.target_status_relay1 == True:
                     SendoToArduino(arduino_connection, 1)
                     print("disparando")
-                time.sleep(random.uniform(4, 6))
+                    time.sleep(random.uniform(4, 6))
+                    ReadFromArduino(arduino_connection)
 
                 if updator.target_status_relay1 == True:
                     SendoToArduino(arduino_connection, 2) #Manda apenas um sinal, que já está associado ao pulso pareado
                     print("disparando")
-                time.sleep(random.uniform(4, 6))
+                    time.sleep(random.uniform(4, 6))
+                    ReadFromArduino(arduino_connection)
 
                 if updator.target_status_relay1 == True:
                     SendoToArduino(arduino_connection, 3) #Manda apenas um sinal, que já está associado ao pulso pareado
                     print("disparando")
+                    time.sleep(random.uniform(4, 6))
+                    ReadFromArduino(arduino_connection)
 
-                time.sleep(random.uniform(4, 6))
-                pulse_index += 1
+                    pulse_index += 1
 
         #hold b key to stop sequence
         if keyboard.is_pressed('b') or pulse_index >= number_of_stimuli:
