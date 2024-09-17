@@ -7,11 +7,11 @@ from Components import constants as consts, txt_configs as txt
 
 '''Connection to Arduino'''
 arduino = ArduinoConnection()
-arduino.connect('COM3', 9600)
+arduino.connect('COM5', 9600)
 
 '''Connection to Updator'''
-updator = UpdateNavigationInfo(1)
-updator.connect('192.168.200.1', [5000])
+updator = UpdateNavigationInfo(2)
+updator.connect('192.168.200.202', [5000, 1000])
 
 pulse_index = 0
 
@@ -19,7 +19,7 @@ while True:
 
     #This one sends the pulses direclty to Arduino, without need of the navigation
     if consts.DEBUG_ARDUINO:
-        arduino.send_to_arduino(1)
+        arduino.send_to_arduino(4)
         time.sleep(5)
     else:
         if not arduino.arduino_connected:
@@ -29,11 +29,12 @@ while True:
             print("Sequence Started")
             while pulse_index < consts.STIMULI_NUMBER:  #Esse while vai mudar para algo do tipo delivering target on, para poder pausar a sequencia
                 print(updator.target_status)
-                if updator.target_status[0]:
+                if updator.target_status[0] and updator.target_status[1]:
                     arduino.send_to_arduino(1) #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
                     txt.file.write(f'{updator.marker_label[0]}\n')
                     print("disparando "+ str(updator.marker_label[0]) + " __ "+ str(pulse_index))
-                    time.sleep(random.uniform(4, 6))
+
+                    time.sleep(random.uniform(7, 10))
                     pulse_index += 1
 
             txt.file.close()

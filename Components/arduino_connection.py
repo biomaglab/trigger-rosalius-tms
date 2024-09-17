@@ -1,5 +1,8 @@
 import serial
-import constants as consts
+import serial.tools.list_ports as lp
+
+available_ports = [port.description for port in lp.comports()]
+print(available_ports)
 
 class ArduinoConnection():
     def __init__(self):
@@ -8,7 +11,7 @@ class ArduinoConnection():
 
     def connect(self, port, baudrate):
         try:
-            self.device = serial.Serial(port, baudrate, timeout=1)
+            self.device = serial.Serial(port, str(baudrate), timeout=1)
             self.arduino_connected = True
             print("Arduino Connection Established")
         except serial.SerialException:
