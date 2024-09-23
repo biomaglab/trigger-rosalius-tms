@@ -38,4 +38,15 @@ class ArduinoConnection():
         self.device.write(msg.encode())
 
     def read_from_arduino(self):
-        print(self.device.readline())
+        read = self.device.readline()
+        read = read.decode('utf-8')
+        read = read.strip()
+
+        try:
+            read = int(read)  # converte a string para um número inteiro
+            #print(read)  # exibe o número
+            return read
+        except ValueError:
+            print("Não foi possível converter para número:", read)
+        #print(self.device.readline())
+        #return read
