@@ -49,9 +49,11 @@ void cronometro1 () {
 void cronometro2 () {
   //Serial.print("Tempo millisTeste: ");
   millisTeste = micros();
-  //Serial.println(millisTeste); //NAO TA PRINTANDO
-  latenciaSearchcoils = millisTeste - millisCondicionante;
-  Serial.println(latenciaSearchcoils);
+  //Serial.println(millisTeste);
+  //latenciaSearchcoils = millisTeste - millisCondicionante;
+  // Serial.println(latenciaSearchcoils);
+  // O ideal é deixar a interrupção o mais curta possível. Vou tentar usar as interrupções só pra pegar os tempos. O resto a gente tenta encaixar em outro lugar.
+
 }
 
 void SimpleProtocol() {
@@ -64,7 +66,7 @@ void SimpleProtocol() {
 void InhibitoryProtocol() {
   //microsOfRisingTMS = micros();
   digitalWrite(OutPinTMS1, HIGH);
-  delayMicroseconds(3950);
+  delay(ISI_inib);
   //delay(1);
   //while ((micros() - microsOfRisingTMS) < TriggerPeakDuration) {
 
@@ -73,6 +75,8 @@ void InhibitoryProtocol() {
   digitalWrite(OutPinTMS1, LOW);
   delayMicroseconds(TriggerPeakDuration);
   digitalWrite(OutPinTMS2, LOW);
+  latenciaSearchcoils = millisTeste - millisCondicionante; //Testar pra ver se essa alteração aqui dá certo.
+  Serial.println(latenciaSearchcoils);
   commandShotTMS = "";
 }
 
@@ -83,6 +87,8 @@ void ExcitatoryProtocol() {
   digitalWrite(OutPinTMS1, LOW);
   delayMicroseconds(TriggerPeakDuration);
   digitalWrite(OutPinTMS2, LOW);
+  latenciaSearchcoils = millisTeste - millisCondicionante; //Testar pra ver se essa alteração aqui dá certo.
+  Serial.println(latenciaSearchcoils);
   commandShotTMS = "";
 }
 
