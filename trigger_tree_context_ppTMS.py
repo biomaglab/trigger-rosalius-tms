@@ -1,14 +1,12 @@
 #import os
 #import sys
 
-import threading
 import time
 import socketio
 import threading
 
 import keyboard
 import serial
-import numpy as np
 import random
 
 
@@ -18,7 +16,7 @@ debug_arduino_ppTMS = False
 number_of_stimuli = 10
 ISI =  100 #Inter Stimuli Interval [ms]. Ex: ISI=10 refers to 10 ms. Currently is defined by the arduino script, this is only valid for the Arduino Debug option
 
-def SendoToArduino(connection, msg):
+def send_to_arduino(connection, msg):
     '''
     As mensagens para o Arduino seguem a seguinte lógica:
     1: Pulso simples
@@ -32,7 +30,7 @@ def SendoToArduino(connection, msg):
 #     print(connection.readline())
 
 # Try connection and send message
-def ArduinoConnection():
+def arduino_connection():
     try:
         connection = serial.Serial("COM3", "115200", timeout=1)
         print("Connection Established")
@@ -163,7 +161,7 @@ class UpdateNavigationInfo:
 
 
 '''Connection to Arduino'''
-arduino_connection = ArduinoConnection()
+arduino_connection = arduino_connection()
 updator = UpdateNavigationInfo()
 
 # if debug_arduino == False:
@@ -179,7 +177,7 @@ while True:
 
     #This one sends the pulses direclty to Arduino, without need of the navigation
     if debug_arduino_ppTMS == True:
-        SendoToArduino(arduino_connection, 4)
+        send_to_arduino(arduino_connection, 4)
         #ReadFromArduino(arduino_connection)
         time.sleep(5)
 
@@ -191,17 +189,17 @@ while True:
         if start_sequence == True:
             while pulse_index < number_of_stimuli:  #Esse while vai mudar para algo do tipo delivering target on, para poder pausar a sequencia
                 if updator.target_status_relay1 == True:
-                    SendoToArduino(arduino_connection, 1)
+                    send_to_arduino(arduino_connection, 1)
                     print("disparando")
                 time.sleep(random.uniform(4, 6))
 
                 if updator.target_status_relay1 == True:
-                    SendoToArduino(arduino_connection, 2) #Manda apenas um sinal, que já está associado ao pulso pareado
+                    send_to_arduino(arduino_connection, 2) #Manda apenas um sinal, que já está associado ao pulso pareado
                     print("disparando")
                 time.sleep(random.uniform(4, 6))
 
                 if updator.target_status_relay1 == True:
-                    SendoToArduino(arduino_connection, 3) #Manda apenas um sinal, que já está associado ao pulso pareado
+                    send_to_arduino(arduino_connection, 3) #Manda apenas um sinal, que já está associado ao pulso pareado
                     print("disparando")
 
                 time.sleep(random.uniform(4, 6))

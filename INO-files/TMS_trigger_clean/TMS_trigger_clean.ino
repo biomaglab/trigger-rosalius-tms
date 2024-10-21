@@ -50,10 +50,6 @@ void cronometro2 () {
   //Serial.print("Tempo millisTeste: ");
   millisTeste = micros();
   //Serial.println(millisTeste);
-  //latenciaSearchcoils = millisTeste - millisCondicionante;
-  // Serial.println(latenciaSearchcoils);
-  // O ideal é deixar a interrupção o mais curta possível. Vou tentar usar as interrupções só pra pegar os tempos. O resto a gente tenta encaixar em outro lugar.
-
 }
 
 void SimpleProtocol() {
