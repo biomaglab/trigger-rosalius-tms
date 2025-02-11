@@ -14,6 +14,7 @@ int searchcoil2=3; //Tem que estar na saída do TMS2, pulso teste
 unsigned long millisCondicionante=0; //tempo associado à detecção do estímulo condicionante (talvez transformar essa variável num vetor)
 unsigned long millisTeste=0; //tempo associado à detecção do estímulo teste (talvez transformar essa variável num vetor)
 unsigned long latenciaSearchcoils=0; //latência entre os pulsos, determinada a partir das respostas das searchcoils (talvez transformar num vetor)
+int commandISI = 0;
 
 
 void setup() {
@@ -31,13 +32,17 @@ void setup() {
 
 void loop() {
   // Identify the command on serial port and take the value
-  if (Serial.available() > 0) commandShotTMS = ReadCommand();
+  if (Serial.available() > 0)  {
+    commandShotTMS = ReadCommand();
 
-  if (commandShotTMS == "1") SimpleProtocol();
+    if (commandShotTMS == "single") SimpleProtocol();
 
-  if (commandShotTMS == "2") InhibitoryProtocol();
+    else {
+      commandISI = commandShotTMS.toInt();
+      //Serial.print(commandISI);
+      ISIProtocol();}
 
-  if (commandShotTMS == "3") ExcitatoryProtocol();
+  }
 }
 
 void cronometro1 () {
@@ -56,36 +61,19 @@ void SimpleProtocol() {
   digitalWrite(OutPinTMS2, HIGH);
   delayMicroseconds(TriggerPeakDuration);
   digitalWrite(OutPinTMS2, LOW);
-  commandShotTMS = "";
 }
 
-void InhibitoryProtocol() {
-  //microsOfRisingTMS = micros();
+void ISIProtocol() {
   digitalWrite(OutPinTMS1, HIGH);
-  delay(ISI_inib);
-  //delay(1);
-  //while ((micros() - microsOfRisingTMS) < TriggerPeakDuration) {
-
-  //}
+  delay(commandISI);
+  //Serial.print(commandISI);
   digitalWrite(OutPinTMS2, HIGH);
-  digitalWrite(OutPinTMS1, LOW);
   delayMicroseconds(TriggerPeakDuration);
+  digitalWrite(OutPinTMS1, LOW);
+  //delayMicroseconds(TriggerPeakDuration);
   digitalWrite(OutPinTMS2, LOW);
   latenciaSearchcoils = millisTeste - millisCondicionante; //Testar pra ver se essa alteração aqui dá certo.
   Serial.println(latenciaSearchcoils);
-  commandShotTMS = "";
-}
-
-void ExcitatoryProtocol() {
-  digitalWrite(OutPinTMS1, HIGH);
-  delay(ISI_exci);
-  digitalWrite(OutPinTMS2, HIGH);
-  digitalWrite(OutPinTMS1, LOW);
-  delayMicroseconds(TriggerPeakDuration);
-  digitalWrite(OutPinTMS2, LOW);
-  latenciaSearchcoils = millisTeste - millisCondicionante; //Testar pra ver se essa alteração aqui dá certo.
-  Serial.println(latenciaSearchcoils);
-  commandShotTMS = "";
 }
 
 // Read the serial port and return command
@@ -94,3 +82,4 @@ String ReadCommand() {
   str.trim();
   return str;
 }
+
