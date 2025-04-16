@@ -9,9 +9,8 @@ import keyboard
 import numpy as np
 import random
 import time
-import magicpy.magicpy as mp
+import magicpy as mp
 from Components.update_navigation import UpdateNavigationInfo
-from random_seq_gen import total_number_of_stimuli,stimuli_mode
 from Components.arduino_connection import ArduinoConnection
 from Components.update_navigation import UpdateNavigationInfo
 from Components import constants as consts, txt_configs as txt
@@ -25,7 +24,7 @@ debug_arduino_ppTMS = False
 ISI_inib = 3  # Inter Stimuli Interval [ms]. Ex: ISI=10 refers to 10 ms. Currently is defined by the arduino script, this is only valid for the Arduino Debug option
 ISI_exci = 11  # Inter Stimuli Interval [ms]. Ex: ISI=10 refers to 10 ms. Currently is defined by the arduino script, this is only valid for the Arduino Debug option
 
-rmt_intensity = 20
+rmt_intensity = 43
 
 intensity_0 = int(rmt_intensity - rmt_intensity * 0.1)
 intensity_1 = int(rmt_intensity)
@@ -35,17 +34,21 @@ intensities = {0: intensity_0,
                1: intensity_1,
                2: intensity_2}
 
-pp_mode = {0: "single",
-           1: "inibitorio",
+pp_mode = {0: "inibitorio",
+           1: "single",
            2: "excitatorio"}
 
 target_intensity = 659, 189
 target_stimuli = 490, 60
 target_status = False
 
+''' LOAD PULSE TREE CONTEXT SEQUENCE '''
+sequence = np.loadtxt('random_sequence_90.txt', delimiter=',', dtype='int')
+print(sequence)
+
 ''' CONNECTION TO NAVIGATION UPDATES '''
 updator = UpdateNavigationInfo(1)
-updator.connect('192.168.200.201', [5000])
+updator.connect('169.254.100.20', [5000])
 
 ''' CONNECTION WITH MAGVENTURE'''
 mp.list_serial_ports()                                              # imprime uma lista de portas disponíveis
@@ -53,10 +56,6 @@ input("Portas listadas. Certifique-se de que está conectando na porta correta. 
 stimulator = mp.MagVenture("COM1")                                  # Inicializa um objeto que se relaciona ao estimulador
 stimulator.connect()
 stimulator.set_page('Main', get_response=True)
-
-''' LOAD PULSE TREE CONTEXT SEQUENCE '''
-sequence = np.loadtxt('sequence_100.txt', delimiter=',', dtype='int')
-print(sequence)
 
 while True:
     if keyboard.is_pressed('s'):
