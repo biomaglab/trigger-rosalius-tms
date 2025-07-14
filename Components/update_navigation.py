@@ -14,7 +14,9 @@ class UpdateNavigationInfo:
         self.rc = [None] * self.number_of_rc
         self.target_status = [None] * self.number_of_rc
         self.marker_label = [None] * self.number_of_rc
+        self.all_target_status = None
         self.thread = None
+        self.status_lock = threading.Lock()
 
     def connect(self, address, ports):
         for i in range(len(self.rc)):
@@ -26,7 +28,8 @@ class UpdateNavigationInfo:
         while True:
             for i in range(len(self.rc)):
                 self.target_status[i], self.marker_label[i] = self.get_buffer_msg(self.rc[i], self.target_status[i], self.marker_label[i])
-
+                print(self.target_status[0])
+            self.all_target_status = all(self.target_status)
 
     def get_buffer_msg(self, rc, target, marker):
         '''
@@ -55,19 +58,21 @@ class UpdateNavigationInfo:
         self.thread = threading.Thread(target=self.processes, daemon=True)
         self.thread.start()
 
+
     #TODO: stop thread
     # def stop_thread(self):
 
-# create_navigation_marker = True
 # delete_marker = False
 # unset_marker = False
 #
-# def send_trigger_to_navigation(rc):
-#     global create_navigation_marker
-#     if create_navigation_marker:
-#         topic = 'Create marker'
-#         data = {}
-#         rc.send_message(topic, data)
+    def send_trigger_to_navigation(self):
+        if consts.create_navigation_marker:
+            topic = 'Create marker'
+            data = {}
+            for rc in self.rc:
+                if rc is not None:
+                    rc.send_message(topic, data)
+
 #
 # def send_to_navigation_delete_marker(rc):
 #     global delete_marker
