@@ -1,7 +1,16 @@
 # trigger-rosalius-tms
 This repository holds the code for triggering tms pulses and equipments with the robotic neuronavigated system Rosalius. 
 
-### Advises for bluetooth connection:
+### General organization:
+The pulse delivery can be done trhought the Arduino or trhought MagicPy for MagVenture systems.
+
+*Components*: general controls and settings. 
+
+*INO-files*: holds the script for the Arduino control
+
+
+
+### Advises for bluetooth connection with Arduino:
 If the Bluetooth device is not showing up in your search, follow these steps: <br>
 Bluetooth  >  Configurações do dispositivo  >  Descoberta de dispositivos bluetooth  >  Avançado
 

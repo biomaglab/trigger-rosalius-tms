@@ -27,15 +27,9 @@ class ArduinoConnection():
         else:
             print("Arduino is not connected")
 
-    def send_to_arduino(self, msg):
-        '''
-        As mensagens para o Arduino seguem a seguinte lógica:
-        1: Pulso simples
-        2: Pulso pareado inibitório
-        3: Pulso pareado excitatório
-        '''
-        msg = str(msg)
-        self.device.write(msg.encode())
+    def send_to_arduino(self, message):
+        if self.arduino_connected:
+            self.device.write((str(message) + '\n').encode())
 
     def read_from_arduino(self):
         read = self.device.readline()

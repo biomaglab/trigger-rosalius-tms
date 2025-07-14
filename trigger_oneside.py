@@ -7,12 +7,11 @@ from Components import constants as consts, txt_configs as txt
 
 '''Connection to Arduino'''
 arduino = ArduinoConnection()
-arduino.connect('COM3', 9600)
+arduino.connect('COM8', 9600)
 
 '''Connection to Updator'''
 updator = UpdateNavigationInfo(1)
-updator.connect('192.168.200.1', [5000])
-
+updator.connect('169.254.100.20', [5000])
 pulse_index = 0
 
 while True:
@@ -30,8 +29,8 @@ while True:
             while pulse_index < consts.STIMULI_NUMBER:  #Esse while vai mudar para algo do tipo delivering target on, para poder pausar a sequencia
                 print(updator.target_status)
                 if updator.target_status[0]:
-                    arduino.send_to_arduino(1) #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
-                    txt.file.write(f'{updator.marker_label[0]}\n')
+                    arduino.send_to_arduino("A") #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
+                    #txt.file.write(f'{updator.marker_label[0]}\n')
                     print("disparando "+ str(updator.marker_label[0]) + " __ "+ str(pulse_index))
                     time.sleep(random.uniform(4, 6))
                     pulse_index += 1
