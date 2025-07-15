@@ -28,8 +28,8 @@ class UpdateNavigationInfo:
         while True:
             for i in range(len(self.rc)):
                 self.target_status[i], self.marker_label[i] = self.get_buffer_msg(self.rc[i], self.target_status[i], self.marker_label[i])
-                print(self.target_status[0])
             self.all_target_status = all(self.target_status)
+            #print(self.all_target_status)
 
     def get_buffer_msg(self, rc, target, marker):
         '''
@@ -50,6 +50,14 @@ class UpdateNavigationInfo:
         time.sleep(0.1)
         return target, marker
 
+    def send_trigger_to_navigation(self):
+        if consts.create_navigation_marker:
+            topic = 'Create marker'
+            data = {}
+            for rc in self.rc:
+                if rc is not None:
+                    rc.send_message(topic, data)
+
     def call_thread(self):
         '''
         Call the processes function as a thread
@@ -65,13 +73,6 @@ class UpdateNavigationInfo:
 # delete_marker = False
 # unset_marker = False
 #
-    def send_trigger_to_navigation(self):
-        if consts.create_navigation_marker:
-            topic = 'Create marker'
-            data = {}
-            for rc in self.rc:
-                if rc is not None:
-                    rc.send_message(topic, data)
 
 #
 # def send_to_navigation_delete_marker(rc):

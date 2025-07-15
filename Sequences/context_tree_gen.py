@@ -39,4 +39,4 @@ if __name__ == "__main__":
         sequence_generator()
 
     print(sequence)
-    np.savetxt('tree_sequence_' + str(number_of_stimuli) + '.txt', sequence, delimiter=',', fmt='%d')
+    np.savetxt('tree_sequence_' + str(number_of_stimuli) + '_LP.txt', sequence, delimiter=',', fmt='%d')

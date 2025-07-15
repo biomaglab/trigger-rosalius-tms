@@ -7,7 +7,6 @@ import numpy as np
 import random
 import time
 import magicpy as mp
-from Components.update_navigation import UpdateNavigationInfo
 from Components.arduino_connection import ArduinoConnection
 from Components.update_navigation import UpdateNavigationInfo
 from Components import constants as consts, txt_configs as txt
@@ -16,9 +15,8 @@ from Components import constants as consts, txt_configs as txt
 
 mode = "pp" #either pp or intensity
 target_status = False
-create_navigation_marker = True # Create list of the markers for each pulse
 debug_arduino_ppTMS = False # True if you want just to check arduino connection
-rmt_intensity = 30 # Resint motor treshold of the subject
+rmt_intensity = 31 # Resint motor treshold of the subject
 
 'For pp mode:'
 ISI_inib = 2.5  # Inter Stimuli Interval [ms]. Ex: ISI=10 refers to 10 ms.
@@ -38,7 +36,7 @@ intensities = {0: "intensity_0",
                2: "intensity_2"}
 
 ''' LOAD PULSE TREE CONTEXT SEQUENCE '''
-sequence = np.loadtxt('Sequences/tree_sequence_300.txt', delimiter=',', dtype='int')
+sequence = np.loadtxt('Sequences/tree_sequence_300_LP.txt', delimiter=',', dtype='int')
 print(sequence)
 
 ''' CONNECTION TO NAVIGATION UPDATES '''
@@ -64,17 +62,36 @@ pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
 
 while True:
-    if updator.target_status[0]:
-        if mode == "pp":
-            start = time.time()
-            if pp_mode[sequence[pulse_index]] == "single":
-                print(pp_mode[sequence[pulse_index]])
-                stimulator.set_mode(mode='Standard', current_dir='Normal', n_pulses_per_burst=2, ipi=5, baratio=80)
-                time.sleep(1)
-                stimulator.arm(get_response=False)
-                time.sleep(1)
-                stimulator.set_amplitude(int(1.2 * rmt_intensity),b_amp=None)
-                time.sleep(1)
+    if updator.target_status:
+        try:
+            if mode == "pp":
+                start = time.time()
+                tipo_estimulo = pp_mode[sequence[pulse_index]]
+                print(tipo_estimulo)
+
+                if tipo_estimulo == "single":
+                    stimulator.set_mode(mode='Standard', current_dir='Normal', n_pulses_per_burst=2, ipi=5, baratio=80)
+                    time.sleep(1)
+                    stimulator.arm(get_response=False)
+                    time.sleep(1)
+                    stimulator.set_amplitude(int(1.2 * rmt_intensity), b_amp=None)
+                    time.sleep(1)
+
+                elif tipo_estimulo == "inibitorio":
+                    stimulator.set_mode(mode='Dual', current_dir='Normal', n_pulses_per_burst=2, ipi=ISI_inib, baratio=80)
+                    time.sleep(1)
+                    stimulator.arm(get_response=False)
+                    time.sleep(1)
+                    stimulator.set_amplitude(int(0.8 * rmt_intensity), b_amp=int(1.2 * rmt_intensity), get_response=False)
+                    time.sleep(1)
+
+                elif tipo_estimulo == "excitatorio":
+                    stimulator.set_mode(mode='Dual', current_dir='Normal', n_pulses_per_burst=2, ipi=ISI_exci, baratio=80)
+                    time.sleep(1)
+                    stimulator.arm(get_response=False)
+                    time.sleep(1)
+                    stimulator.set_amplitude(int(0.8 * rmt_intensity), b_amp=int(1.2 * rmt_intensity), get_response=False)
+                    time.sleep(1)
 
                 while not updator.target_status[0]:
                     time.sleep(0.01)
@@ -84,49 +101,21 @@ while True:
                     if consts.create_navigation_marker:
                         updator.send_trigger_to_navigation()
 
+            elif mode == "intensity":
+                intensidade = intensities[sequence[pulse_index]]
+                print(intensidade)
 
-            elif pp_mode[sequence[pulse_index]] == "inibitorio":
-                print(pp_mode[sequence[pulse_index]])
-                stimulator.set_mode(mode='Dual', current_dir='Normal', n_pulses_per_burst=2, ipi=ISI_inib, baratio=80)
-                time.sleep(1)
-                stimulator.arm(get_response=False)
-                time.sleep(1)
-                stimulator.set_amplitude(int(0.8 * rmt_intensity), b_amp=int(1.2 * rmt_intensity), get_response=False)
-                time.sleep(1)
-
-                while not updator.target_status[0]:
-                    time.sleep(0.01)
-
-                with updator.status_lock:
-                    stimulator.fire()
-                    if consts.create_navigation_marker:
-                        updator.send_trigger_to_navigation()
-
-            elif pp_mode[sequence[pulse_index]] == "excitatorio":
-                print(pp_mode[sequence[pulse_index]])
-                stimulator.set_mode(mode='Dual', current_dir='Normal', n_pulses_per_burst=2, ipi=ISI_exci, baratio=80)
-                time.sleep(1)
-                stimulator.arm(get_response=False)
-                time.sleep(1)
-                stimulator.set_amplitude(int(0.8 * rmt_intensity), b_amp=int(1.2 * rmt_intensity), get_response=False)
-                time.sleep(1)
-
-                while not updator.target_status[0]:
-                    time.sleep(0.01)
-
-                with updator.status_lock:
-                    stimulator.fire()
-                    if consts.create_navigation_marker:
-                        updator.send_trigger_to_navigation()
-
-        elif mode == "intensity":
-            if intensities[sequence[pulse_index]] == "intensity_0":
-                print(pp_mode[sequence[pulse_index]])
                 stimulator.set_mode(mode='Standard', current_dir='Normal', n_pulses_per_burst=2, ipi=5, baratio=80)
                 time.sleep(1)
                 stimulator.arm(get_response=False)
                 time.sleep(1)
-                stimulator.set_amplitude(intensity_0, b_amp=None)
+
+                if intensidade == "intensity_0":
+                    stimulator.set_amplitude(intensity_0, b_amp=None)
+                elif intensidade == "intensity_1":
+                    stimulator.set_amplitude(intensity_1, b_amp=None)
+                elif intensidade == "intensity_2":
+                    stimulator.set_amplitude(intensity_2, b_amp=None)
                 time.sleep(1)
 
                 with updator.status_lock:
@@ -134,43 +123,20 @@ while True:
                     if consts.create_navigation_marker:
                         updator.send_trigger_to_navigation()
 
-            elif intensities[sequence[pulse_index]] == "intensity_1":
-                print(pp_mode[sequence[pulse_index]])
-                stimulator.set_mode(mode='Standard', current_dir='Normal', n_pulses_per_burst=2, ipi=5, baratio=80)
-                time.sleep(1)
-                stimulator.arm(get_response=False)
-                time.sleep(1)
-                stimulator.set_amplitude(intensity_1, b_amp=None)
-                time.sleep(1)
+            print("disparando")
+            time.sleep(random.uniform(consts.IPI[0], consts.IPI[1]))
 
-                with updator.status_lock:
-                    stimulator.fire()
-                    if consts.create_navigation_marker:
-                        updator.send_trigger_to_navigation()
+            print("Index do pulso", pulse_index+1)
+            pulse_index += 1  # Só incrementa se tudo deu certo
 
-            elif intensities[sequence[pulse_index]] == "intensity_2":
-                print(pp_mode[sequence[pulse_index]])
-                stimulator.set_mode(mode='Standard', current_dir='Normal', n_pulses_per_burst=2, ipi=5, baratio=80)
-                time.sleep(1)
-                stimulator.arm(get_response=False)
-                time.sleep(1)
-                stimulator.set_amplitude(intensity_2, b_amp=None)
-                time.sleep(1)
+        except Exception as e:
+            print(f"\n⚠️ ERRO no pulso {pulse_index}: {e}")
+            print("Tentando novamente o mesmo pulso...\n")
+            time.sleep(2)  # pequena pausa antes de tentar de novo
 
-                with updator.status_lock:
-                    stimulator.fire()
-                    if consts.create_navigation_marker:
-                        updator.send_trigger_to_navigation()
+    # Tecla B ou fim da sequência
+    if keyboard.is_pressed('b') or pulse_index >= len(sequence):
+        print("Encerrando sequência.")
+        break
 
-        # print("Process time: ", (time.time() - start))
-        # print("Process time: ", (time.time() - start))
-        print("disparando")
-
-        time.sleep(random.uniform(consts.IPI[0], consts.IPI[1]))
-        print("Index do pulso", pulse_index+1)
-        pulse_index += 1 # Tem q estar vinculado com o fire e o sleep
-
-        # hold b key to stop sequence
-        if keyboard.is_pressed('b') or pulse_index >= len(sequence):
-            break
-        time.sleep(0.01)
+    time.sleep(0.01)

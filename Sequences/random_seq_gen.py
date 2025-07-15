@@ -1,8 +1,8 @@
 import random
 import numpy as np
 
-stimuli_mode = [0, 1, 2, 3]
-number_of_stimuli_per_mode = 5
+stimuli_mode = [0, 1, 2]
+number_of_stimuli_per_mode = 100
 total_number_of_stimuli = number_of_stimuli_per_mode * len(stimuli_mode)
 
 if __name__ == "__main__":
@@ -15,4 +15,4 @@ if __name__ == "__main__":
     sequence_array = np.array(sequence)
     print('Generated random sequence:', sequence_array)
 
-    np.savetxt('random_sequence_' + str(total_number_of_stimuli) + '.txt', sequence_array, delimiter=',', fmt='%d')
+    np.savetxt('random_sequence_' + str(total_number_of_stimuli) + '_LP.txt', sequence_array, delimiter=',', fmt='%d')

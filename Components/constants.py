@@ -4,7 +4,7 @@
 START_SEQUENCE = False # Button in the future
 DEBUG_ARDUINO = False
 STIMULI_NUMBER = 50 #Number of total stimuli
-IPI = [3,5] # Interpulse interval for the experiment
+IPI = [1,3] # Interpulse interval for the experiment
 create_navigation_marker = False
 
 # Publisher messages from invesalius

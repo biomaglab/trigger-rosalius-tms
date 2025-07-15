@@ -6,24 +6,21 @@ import time
 
 from Components.constants import create_navigation_marker
 #import magicpy.magicpy as mp
-from Sequences.random_seq_gen import total_number_of_stimuli,stimuli_mode
 from Components.arduino_connection import ArduinoConnection
 from Components.update_navigation import UpdateNavigationInfo
-from Components import txt_configs as txt
 from Components import constants as consts, txt_configs as txt
 
-
-print(total_number_of_stimuli)
 #either pp or intensity
 mode = "pp"
 target_status = False
 debug_arduino_ppTMS = False
 
-pp_mode = {stimuli_mode[0]: "single",
-           stimuli_mode[1]: "10ms",
-           stimuli_mode[2]: "40ms",
-           stimuli_mode[3]: "150ms"}
-
+pp_mode = {
+    0: "single",
+    1: "10ms",
+    2: "40ms",
+    3: "150ms"
+}
 
 '''Connection to Arduino'''
 arduino = ArduinoConnection()
@@ -47,7 +44,7 @@ pyautogui.FAILSAFE = False
 ISI_measurements = []
 
 while True:
-    if updator.target_status[0]: ##CHECAR SE É ISSO MESMO
+    if updator.all_target_status: ##CHECAR SE É ISSO MESMO
         print(updator.target_status)
         if mode == "pp":
             start = time.time()
