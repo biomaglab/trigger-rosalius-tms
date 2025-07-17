@@ -41,7 +41,8 @@ print("start sequence")
 pulse_index = 0
 pyautogui.PAUSE = 0
 pyautogui.FAILSAFE = False
-ISI_measurements = []
+#ISI_measurements = []
+
 
 while True:
     #print(updator.all_target_status)
