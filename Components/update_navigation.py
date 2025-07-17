@@ -29,7 +29,6 @@ class UpdateNavigationInfo:
             for i in range(len(self.rc)):
                 self.target_status[i], self.marker_label[i] = self.get_buffer_msg(self.rc[i], self.target_status[i], self.marker_label[i])
             self.all_target_status = all(self.target_status)
-            #print(self.all_target_status)
 
     def get_buffer_msg(self, rc, target, marker):
         '''

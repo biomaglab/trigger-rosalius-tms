@@ -32,7 +32,7 @@ while True:
                     arduino.send_to_arduino("A") #A mensagem se mofifica a partir da escolha do tipo de pulso (Simples, pareado, etc)
                     #txt.file.write(f'{updator.marker_label[0]}\n')
                     print("disparando "+ str(updator.marker_label[0]) + " __ "+ str(pulse_index))
-                    time.sleep(random.uniform(4, 6))
+                    time.sleep(random.uniform(consts.ITI[0], consts.ITI[1]))
                     pulse_index += 1
 
             txt.file.close()

@@ -124,7 +124,7 @@ while True:
                         updator.send_trigger_to_navigation()
 
             print("disparando")
-            time.sleep(random.uniform(consts.IPI[0], consts.IPI[1]))
+            time.sleep(random.uniform(consts.ITI[0], consts.ITI[1]))
 
             print("Index do pulso", pulse_index+1)
             pulse_index += 1  # Só incrementa se tudo deu certo

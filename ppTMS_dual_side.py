@@ -44,6 +44,7 @@ pyautogui.FAILSAFE = False
 ISI_measurements = []
 
 while True:
+    #print(updator.all_target_status)
     if updator.all_target_status: ##CHECAR SE É ISSO MESMO
         print(updator.target_status)
         if mode == "pp":
@@ -108,7 +109,7 @@ while True:
         print("Process time: ", (time.time() - start))
         print("disparando")
 
-        time.sleep(random.uniform(4, 8))
+        time.sleep(random.uniform(consts.ITI[0], consts.ITI[1]))
         print(pulse_index)
         pulse_index += 1
 
