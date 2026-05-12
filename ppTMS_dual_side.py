@@ -28,7 +28,7 @@ arduino.connect('COM8', 9600)
 
 '''Connection to Updator'''
 updator = UpdateNavigationInfo(2)
-updator.connect('169.254.100.20', [5000, 1000])
+updator.connect('127.0.0.1', [5000, 1000])
 
 ''' LOAD PULSE SEQUENCE '''
 sequence = np.loadtxt('Sequences/random_sequence_20.txt', delimiter=',', dtype='int')
