@@ -2,7 +2,7 @@
 This repository holds the code for triggering tms pulses and equipments with the robotic neuronavigated system Rosalius. 
 
 ## Controling TMS pulses is done in two ways:
-1) MagicPy: directly controls MagVenture systems through COM2 port.
+1) MagicPy: directly controls MagVenture systems through COM2 port. Inter pulse interval (IPI) is limited in MagicPy. Check interval.
 2) Arduino/ESP: controls through the input/output port.
 
 ## General organization:

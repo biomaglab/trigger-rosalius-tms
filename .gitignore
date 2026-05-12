@@ -8,3 +8,6 @@ Sequences/random_sequence_300_LP.txt
 Sequences/tree_sequence_300_LP.txt
 Sequences/random_seq_gen.py
 Sequences/random_seq_gen.py
+
+.venv/
+vemv/

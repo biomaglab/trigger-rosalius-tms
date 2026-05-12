@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import pandas as pd
 
 values = [0, 1, 2]
 sequence = [random.choice(values)]
@@ -39,4 +40,6 @@ if __name__ == "__main__":
         sequence_generator()
 
     print(sequence)
-    np.savetxt('tree_sequence_' + str(number_of_stimuli) + '_LP.txt', sequence, delimiter=',', fmt='%d')
+    contagem = pd.Series(sequence).value_counts().sort_index()
+    print(contagem)
+    np.savetxt('tree_sequence_' + str(number_of_stimuli) + '_TCM.txt', sequence, delimiter=',', fmt='%d')

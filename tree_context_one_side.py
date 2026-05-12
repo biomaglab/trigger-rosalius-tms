@@ -14,13 +14,14 @@ from Components import constants as consts, txt_configs as txt
 ''' CHOOSE EXPERIMENTS SETTINGS '''
 
 mode = "pp" #either pp or intensity
-target_status = False
+target_status = True
 debug_arduino_ppTMS = False # True if you want just to check arduino connection
-rmt_intensity = 31 # Resting motor treshold of the subject
+
+rmt_intensity = 32 # Resting motor treshold of the subject
 
 'For pp mode:'
 ISI_inib = 2.5  # Inter Stimuli Interval [ms]. Ex: ISI=10 refers to 10 ms.
-ISI_exci = 12
+ISI_exci = 8
 
 pp_mode = {0: "inibitorio",
            1: "single",
@@ -36,17 +37,17 @@ intensities = {0: "intensity_0",
                2: "intensity_2"}
 
 ''' LOAD PULSE TREE CONTEXT SEQUENCE '''
-sequence = np.loadtxt('Sequences/tree_sequence_300_VFM.txt', delimiter=',', dtype='int')
+sequence = np.loadtxt('tree_sequence_300_TCM.txt', delimiter=',', dtype='int')
 print(sequence)
 
 ''' CONNECTION TO NAVIGATION UPDATES '''
-# updator = UpdateNavigationInfo(1)
-# updator.connect('169.254.100.20', [5000])
+updator = UpdateNavigationInfo(1)
+updator.connect('127.0.0.1', [5000])
 
 ''' CONNECTION WITH MAGVENTURE'''
 mp.list_serial_ports()                                              # imprime uma lista de portas disponíveis
 input("Portas listadas. Certifique-se de que está conectando na porta correta. Pressione Enter para continuar...")         # Aguarda o usuário clicar Enter para continuar
-stimulator = mp.MagVenture("COM11")                                  # Inicializa um objeto que se relaciona ao estimulador
+stimulator = mp.MagVenture("COM1")                                  # Inicializa um objeto que se relaciona ao estimulador
 stimulator.connect()
 stimulator.set_page('Main', get_response=False)
 

@@ -22,11 +22,11 @@ if fixed_number_of_stimuli:
 
 else:
     #LOAD SEQUENCE TREE
-    sequence_tree = np.loadtxt('sequence_100.txt', delimiter=',', dtype='int')
+    sequence_tree = np.loadtxt(r'tree_sequence_300_TCM.txt', delimiter=',', dtype='int')
     contagem = pd.Series(sequence_tree).value_counts().sort_index()
     sequence = np.array([key for key, val in contagem.items() for _ in range(val)])
     np.random.shuffle(sequence)
     print(sequence)
     print(contagem)
     sequence_array = np.array(sequence)
-    np.savetxt('random_sequence_'+'.txt', sequence_array, delimiter=',', fmt='%d')
+    np.savetxt('random_sequence_'+'TCM.txt', sequence_array, delimiter=',', fmt='%d')
