@@ -11,7 +11,7 @@ arduino.connect('COM8', 9600)
 
 '''Connection to Updator'''
 updator = UpdateNavigationInfo(1)
-updator.connect('169.254.100.20', [5000])
+updator.connect('127.0.0.1', [5000])
 pulse_index = 0
 
 while True:
